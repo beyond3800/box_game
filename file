@@ -1,0 +1,66 @@
+const card =document.getElementById('card');
+const submit=document.getElementById('submit');
+const list =document.getElementById('list');
+
+const btn_search =document.getElementById('btn_search');
+
+
+
+// let rn = random()
+//  let random=()=>{
+//   let random = Math.floor(Math.random()*732)
+//   return random
+//  }
+  
+
+
+// 1253759752056424
+   
+
+  submit.onclick=()=>{
+      let id= Math.floor(Math.random()*732)
+        let fetchs = fetch(`https://www.superheroapi.com/api.php/1253759752056424/${id}`);
+         fetchs.then(res=>{res.json()
+        .then(json=>{
+          card.innerHTML=`  <div class="card" id="card">
+                           <img src="${json['image']['url']}" alt=""> </div>`;     
+
+           list.innerHTML=   `<h3>Name: ${json['name']}</h3> <br>
+           <h3> Combat: ${json['powerstats']['combat']}</h3><br>
+           <h3> Power: ${json['powerstats']['power']}</h3><br>
+           <h3>  Speed: ${json['powerstats']['speed']}</h3><br>
+           <h3> Strength: ${json['powerstats']['strength']}</h3><br>
+           <h3> Intelligence: ${json['powerstats']['intelligence']}</h3><br>`
+          console.log(json.powerstats)
+         
+        })
+        
+      })
+      return console.log(id)
+
+}
+      btn_search.onclick=()=>{
+        const search = document.getElementById('search').value
+        let token =1253759752056424
+        let fetchs= fetch(`https://www.superheroapi.com/api.php/${token}/search/${search}`)
+          fetchs.then(res=>{res.json()
+                 .then(json=>{
+                  console.log(json['results'][0])
+                  card.innerHTML=`  <div class="card" id="card">
+                  <img src="${json['results'][0]['image']['url']}" alt=""> </div>`;
+
+              
+
+                list.innerHTML=   `<h3>Name: ${json['results'][0]['name']}</h3> <br>
+                <h3> Combat: ${json['results'][0]['powerstats']['combat']}</h3><br>
+                <h3> Power: ${json['results'][0]['powerstats']['power']}</h3><br>
+                <h3>  Speed: ${json['results'][0]['powerstats']['speed']}</h3><br>
+                <h3> Strength: ${json['results'][0]['powerstats']['strength']}</h3><br>
+                <h3> Intelligence: ${json['results'][0]['powerstats']['intelligence']}</h3><br>`
+              
+                 })
+          })
+      }
+
+
+

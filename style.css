@@ -1,0 +1,102 @@
+.grid-col-3{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    width: 300px;
+    margin-top: 200px;
+    gap: 1px;
+}
+main{
+    display: grid;
+    place-content: center;
+}
+.eachBox{
+    width: 100px;
+    height: 80px;
+    border: 1px solid #333;
+    background: #eee;
+}
+.player{
+    background: #000;
+}
+.com{
+    background: red;
+}
+.scores{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 25px;
+}
+.winner{
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 30px;
+}
+nav{
+    display: flex;
+    height: 50px;
+    background: #eee;
+    justify-content: space-between;
+    align-items: center;
+}
+nav header{
+    margin-left: 10px;
+    letter-spacing: 2px;
+    font-size: 30px;
+}
+header span{
+    color: red;
+}
+ul{
+    display: flex;
+    list-style: none;
+}
+ul li{
+    margin-right: 20px;
+}
+ul a{
+    text-decoration: none;
+    font-size: 25px;
+    color: #000;
+}
+ul a:hover{
+    color: red;
+}
+.underline{
+    height: 5px;
+    width: 100px;
+    background-color: green;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -10px;
+}
+.about{
+    text-align: center;
+    margin-top: 30px;
+}
+.about h2{
+    font-size: 30px;
+    letter-spacing: 1px;
+}
+.contents{
+    display: grid;
+    grid-template-columns: repeat(1fr);
+    margin-top: 40px;
+    font-size: 20px;
+    line-height: 40px;
+    word-spacing: 1px;
+    font-weight: bold;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow Bold', sans-serif;
+}
+@media(max-width:600px){
+    ul a{
+        font-size: medium;
+        font-weight: bold;
+    }
+    .contents{
+        padding: 10px;
+        font-weight: 700;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+}
+
