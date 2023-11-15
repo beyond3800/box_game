@@ -90,7 +90,7 @@ ul a:hover{
 }
 @media(max-width:600px){
     ul a{
-        font-size: medium;
+        font-size: small;
         font-weight: bold;
     }
     .contents{
