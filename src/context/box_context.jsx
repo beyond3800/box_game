@@ -9,21 +9,11 @@ export const BoxProvider = (props) =>{
     const [winner, setWinner] = useState('');
     const [computerScore,setComputerScore] = useState(0);
     const [playerScore,setPlayerScore] = useState(0);
+    const [firstPlay,setFirstPlay] = useState('')
+    const [gameEnd,setGameEnd] = useState(true)
+    const [comPlaying,setComPlaying] = useState(false)
 
-    const handleClick = (props,e) =>{
-        const {id,on} = props.data
-        const {play} = e.target.dataset
-        const board = [...boxRef.current.children]
-        if(play == ''){
-            e.target.dataset.play = 'player'
-            e.target.classList.add('player')
-            console.log(winner)
-            computer(id) 
-        }else{
-            return
-        }
-    }
-    const computer = (id) =>{
+    const forAllLoops = () =>{
         const board = [...boxRef.current.children]
         const boxBoard = {
             all:[],
@@ -46,7 +36,16 @@ export const BoxProvider = (props) =>{
             vertical1:[],
             vertical2:[]
         }
-        let pick = null
+        const computerBoard = {
+            col1:[],
+            col2:[],
+            col3:[],
+            row1:[],
+            row3:[],
+            row2:[],
+            vertical1:[],
+            vertical2:[]
+        }
         for (let index of board) {
             if(index.dataset.play == ''){
                 if(index.dataset.row == 'row1' ){
@@ -103,11 +102,54 @@ export const BoxProvider = (props) =>{
                     PlayerBoard.vertical2.push(index.id)
                 }
             }
+            if(index.dataset.play == 'com'){
+                if(index.dataset.row == 'row1' ){
+                    computerBoard.row1.push(index.id)
+                }
+                else if(index.dataset.row == 'row2' ){
+                    computerBoard.row2.push(index.id)
+                }
+                else if(index.dataset.row == 'row3' ){
+                    computerBoard.row3.push(index.id)
+                }
+                if(index.dataset.col == 'col1' ){
+                    computerBoard.col1.push(index.id)
+                }
+                else if(index.dataset.col == 'col2' ){
+                    computerBoard.col2.push(index.id)
+                }
+                else if(index.dataset.col == 'col3' ){
+                    computerBoard.col3.push(index.id)
+                }
+                if(index.dataset.vertical == 'vertical1' || index.dataset.vertical == 'center'  ){
+                    computerBoard.vertical1.push(index.id)
+                }
+                if(index.dataset.vertical == 'vertical2' || index.dataset.vertical == 'center' ){
+                    computerBoard.vertical2.push(index.id)
+                }
+            }
         }
-        if(winner==''){
-            computerPlays(CPH(boxBoard,board,PlayerBoard),board)
-            checkWinner(board)
+        return {'boxBoard':boxBoard,'PlayerBoard':PlayerBoard,'computerBoard':computerBoard,'board':board}
+    }
+    const handleClick = (props,e) =>{
+
+        const {id,on} = props.data
+        const {play} = e.target.dataset
+        const board = [...boxRef.current.children]
+        if(play == '' && winner == '' && !comPlaying){
+            e.target.dataset.play = 'player'
+            e.target.classList.add('player')
+            computer();
         }
+        else{
+            return
+        }
+
+    }
+    const computer = () =>{
+        setTimeout(() => {
+            computerPlays(CPH(forAllLoops().boxBoard,forAllLoops().board,forAllLoops().PlayerBoard),forAllLoops().board)
+        }, 1000);
     }
     //CPH checking player hand
     const CPH = (boxBoard,board,PlayerBoard)=>{
@@ -116,7 +158,31 @@ export const BoxProvider = (props) =>{
         if(boxBoard.all.length == 0){
             setWinner('draw')
         }
-        if(boxBoard.col1.length == 1 && PlayerBoard.col1.length == 2){
+        if(boxBoard.col1.length == 1 && forAllLoops().computerBoard.col1.length == 2){
+            pick = boxBoard.col1[0]
+        }
+        else if(boxBoard.col2.length == 1 && forAllLoops().computerBoard.col2.length == 2){
+            pick = boxBoard.col2[0]
+        }
+        else if(boxBoard.col3.length == 1 && forAllLoops().computerBoard.col3.length == 2){
+            pick = boxBoard.col3[0]
+        }
+        else if(boxBoard.row1.length == 1 && forAllLoops().computerBoard.row1.length == 2){
+            pick = boxBoard.row1[0]
+        }
+        else if(boxBoard.row2.length == 1 && forAllLoops().computerBoard.row2.length == 2){
+            pick = boxBoard.row2[0]
+        }
+        else if(boxBoard.row3.length == 1 && forAllLoops().computerBoard.row3.length == 2){
+            pick = boxBoard.row3[0]
+        }
+        else if(boxBoard.vertical1.length == 1 && forAllLoops().computerBoard.vertical1.length == 2){
+            pick = boxBoard.vertical1[0]
+        }
+        else if(boxBoard.vertical2.length == 1 && forAllLoops().computerBoard.vertical2.length == 2){
+            pick = boxBoard.vertical2[0]
+        }
+        else if(boxBoard.col1.length == 1 && PlayerBoard.col1.length == 2){
             pick = boxBoard.col1[0]
         }
         else if(boxBoard.col2.length == 1 && PlayerBoard.col2.length == 2){
@@ -141,161 +207,109 @@ export const BoxProvider = (props) =>{
             pick = boxBoard.vertical2[0]
         }
         else{
-            pick = Math.floor(Math.random()*boxBoard.all.length)
+            const random = Math.floor(Math.random()*boxBoard.all.length)
+            pick = boxBoard.all[random]
             console.log(boxBoard.all)
         }
         return pick
     }
     const computerPlays = (pick,board) =>{
         const comPicked = board[pick]
-        if(comPicked.dataset.play == ''){
+        const player = getWinner(forAllLoops())
+        if( player!= 'player' || winner == null ){
+            if(comPicked.dataset.play == ''){
                 // const random = Math.floor(Math.random()*(10 - 2 + 1))+2
                 comPicked.dataset.play = 'com'
                 setTimeout(()=>{
                     comPicked.classList.add('com')
                 },1000) 
+            }
+            else{
+                const all = forAllLoops().boxBoard.all
+                const random = Math.floor(Math.random()*all.length)
+                const select = all[random]
+                const comPicked = board[select]
+                setTimeout(()=>{
+                    comPicked.classList.add('com')
+                },1000)
+            }
+        }
+        getWinner(forAllLoops())
+        if(getWinner(forAllLoops()) == 'player'){
+            setPlayerScore(prev=>prev+1)
+        }else if(getWinner(forAllLoops()) == 'computer'){
+            setComputerScore(prev=>prev+1)
         }
     }
-        const checkWinner = (board) =>{
-            const playerCheck = {
-                col1:[],
-                col2:[],
-                col3:[],
-                row1:[],
-                row3:[],
-                row2:[],
-                vertical1:[],
-                vertical2:[]
-            }
-            const computerCheck = {
-                col1:[],
-                col2:[],
-                col3:[],
-                row1:[],
-                row3:[],
-                row2:[],
-                vertical1:[],
-                vertical2:[]
-            }
-            for(let index of board){
-                // checking winnig match for player
-                if(index.dataset.play == 'player'){
-                    if(index.dataset.row == 'row1' && index.dataset.play == 'player'){
-                        playerCheck.row1.push(index.id)
-                    }
-                    else if(index.dataset.row == 'row2' && index.dataset.play == 'player'){
-                        playerCheck.row2.push(index.id)
-                    }
-                    else if(index.dataset.row == 'row3' && index.dataset.play == 'player'){
-                        playerCheck.row3.push(index.id)
-                    }
-                    if(index.dataset.col == 'col1' && index.dataset.play == 'player'){
-                        playerCheck.col1.push(index.id)
-                    }
-                    else if(index.dataset.col == 'col2' && index.dataset.play == 'player'){
-                        playerCheck.col2.push(index.id)
-                    }
-                    else if(index.dataset.col == 'col3' && index.dataset.play == 'player'){
-                        playerCheck.col3.push(index.id)
-                    }
-                    if(index.dataset.vertical == 'vertical1' || index.dataset.vertical == 'center'  && index.dataset.play == 'player'){
-                        playerCheck.vertical1.push(index.id)
-                    }
-                    if(index.dataset.vertical == 'vertical2' || index.dataset.vertical == 'center' && index.dataset.play == 'player'){
-                        playerCheck.vertical2.push(index.id)
-                    }
-                }
-                // checking winnig match for computer
-                if(index.dataset.play == 'com'){
-                    if(index.dataset.row == 'row1' && index.dataset.play == 'com'){
-                        computerCheck.row1.push(index.id)
-                    }
-                    else if(index.dataset.row == 'row2' && index.dataset.play == 'com'){
-                        computerCheck.row2.push(index.id)
-                    }
-                    else if(index.dataset.row == 'row3' && index.dataset.play == 'com'){
-                        computerCheck.row3.push(index.id)
-                    }
-                    if(index.dataset.col == 'col1' && index.dataset.play == 'com'){
-                        computerCheck.col1.push(index.id)
-                    }
-                    else if(index.dataset.col == 'col2' && index.dataset.play == 'com'){
-                        computerCheck.col2.push(index.id)
-                    }
-                    else if(index.dataset.col == 'col3' && index.dataset.play == 'com'){
-                        computerCheck.col3.push(index.id)
-                    }
-                    if(index.dataset.vertical == 'vertical1' || index.dataset.vertical == 'center'  && index.dataset.play == 'com'){
-                        computerCheck.vertical1.push(index.id)
-                    }
-                    if(index.dataset.vertical == 'vertical2' || index.dataset.vertical == 'center' && index.dataset.play == 'com'){
-                        computerCheck.vertical2.push(index.id)
-                    }
-                }
-                }
-            getWinner(playerCheck,computerCheck)
-        }
-        const getWinner = (player,computer) =>{
-        let outcome = null
+    // const checkWinner = () =>{
+    //     getWinner(forAllLoops().computerBoard,forAllLoops().PlayerBoard)
+    // }
+    const getWinner = (data) =>{
+        const {computerBoard,PlayerBoard} = data
+        const player = PlayerBoard;
+        const computer = computerBoard
+        let winner = null
         if(player.col1.length == 3 || player.col2.length == 3 || player.col3.length == 3 || player.row1.length == 3 || player.row2.length == 3 || player.row3.length == 3 || player.vertical1.length == 3 || player.vertical2.length == 3){
             setTimeout(() => {
-                setWinner('player')
-                setPlayerScore(prev=>prev +1)
-            }, 1000);
-
+            }, 100);
+            setWinner('player')
+            setFirstPlay('computer')
+            winner = 'player'
         }
         else if(computer.col1.length == 3 || computer.col2.length == 3 || computer.col3.length == 3 || computer.row1.length == 3 || computer.row2.length == 3 || computer.row3.length == 3 || computer.vertical1.length == 3 || computer.vertical2.length == 3){
             setTimeout(() => {
-                setWinner('computer')
-                setComputerScore(prev=>prev +1)
-            }, 1000);
-
+                // setComputerScore(prev=>prev +1)
+            }, 100);
+            setFirstPlay('')
+            setWinner('computer')
+            winner = 'computer'
         }
+        else if(forAllLoops().boxBoard.all.length == 0 && winner == ''){
+            setWinner('draw')
+            winner = 'draw'
+        }
+        return winner
     }
     const clearBoard = () =>{
-        
+       
     };
+    
     const emptyBoard = () =>{
-        const board = [...boxRef.current.children]
-        for(const boards of board){
-            boards.dataset.play = '';
-            if(boards.classList.contains('player')){
-                boards.classList.remove('player')
-            }
-            else if(boards.classList.contains('com')){
-                boards.classList.remove('com')
-            }
-        }
-        console.log('remove')
-    };
-    if(winner){
-        setTimeout(() => {
-            // clearBoard()
-            setWinner('')
-            emptyBoard() 
-        }, 1500);
-    }
-    const handleBoxChange = (id,on,play) =>{
-        const newBox = []
-        let updateBox = {};
-        setBox((prev)=>{
-            for(let i = 0; i<prev.length; i++){
-                const currentBox = prev[i];
-                if(currentBox.id === id){
-                     updateBox = {
-                        ...currentBox,
-                        on:play
-                    }
-                    // console.log(newBox)
-                    newBox.push(updateBox)
-                }else{
-                    newBox.push(currentBox)
+        if(winner){
+            const board = [...boxRef.current.children]
+            const all = []
+            setWinner('');
+            for(const boards of board){
+                boards.dataset.play = '';
+                if(boards.classList.contains('player')){
+                    boards.classList.remove('player')
+                }
+                else if(boards.classList.contains('com')){
+                    boards.classList.remove('com')
                 }
             }
-            computer(updateBox,newBox)
-            return newBox
-        })
+            setGameEnd(true)
+        }
+        // console.log(forAllLoops().boxBoard.all)
+    };
+    const computerPlaysFirst = (firstPlay) =>{
+        if(firstPlay && forAllLoops().boxBoard.all.length > 7 || winner == 'draw'){
+            computer()
+        }
+    };
+    const Attack = () =>{
+    
     }
+    if(firstPlay){
+        computerPlaysFirst(firstPlay);
+    }
+    if(winner){
+        setTimeout(() => {
+            emptyBoard()
+        }, 2000);
+    }
+
+
     const context ={
         box,
         handleClick,
@@ -303,6 +317,7 @@ export const BoxProvider = (props) =>{
         winner,
         computerScore,
         playerScore,
+        emptyBoard,
     }
     return(
         <BoxContext.Provider value={context}>

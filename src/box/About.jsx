@@ -15,7 +15,7 @@ const About = () => {
                 <div className=""> 
                     You will be playing with computer
                 </div>
-                <div className="">The game is a newly developed game by <i>OPISCO</i> and this is the first version of the game</div>
+                <div className="">The game is a newly developed game by <i>OPISCO</i> and this is the second version of the game</div>
             </div>
         </div>
     </div>

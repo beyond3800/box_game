@@ -9,6 +9,7 @@ const Box = () => {
     winner,
     computerScore,
     playerScore,
+    emptyBoard,
   } = useContext(BoxContext)
   return (
     <main className="">
@@ -20,6 +21,7 @@ const Box = () => {
         <div className="scores">
           <div className="">Player: <span>{playerScore}</span> </div> vs <div className="">Computer: <span>{computerScore}</span> </div>
         </div>
+        <div className="btn"><button onClick={()=>emptyBoard()}>Play on</button></div>
       </div>
     </main>
 
