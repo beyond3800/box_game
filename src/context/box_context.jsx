@@ -335,6 +335,7 @@ export const BoxProvider = (props) =>{
         let winner = null
         if(forAllLoops().boxBoard.all.length == 0 || winner == ''){
             setWinner('draw')
+            setRound(prev=>prev+1)
             winner = 'draw'
         }
         else if(player.col1.length == 3 || player.col2.length == 3 || player.col3.length == 3 || player.row1.length == 3 || player.row2.length == 3 || player.row3.length == 3 || player.vertical1.length == 3 || player.vertical2.length == 3){
