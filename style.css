@@ -14,6 +14,7 @@ main{
     height: 80px;
     border: 1px solid #333;
     background: #eee;
+    cursor: pointer;
 }
 .player{
     background: #000;
@@ -87,6 +88,26 @@ ul a:hover{
     word-spacing: 1px;
     font-weight: bold;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow Bold', sans-serif;
+}
+.btnArea{
+    display: flex;
+    justify-content: space-between;
+}
+.btnArea button{
+    font-size: x-large;
+    border-radius: 5px;
+}
+.playOn:hover{
+    background-color: rgb(59, 181, 59);
+    color: white;
+}
+.played{
+    font-size: x-large;
+    text-align: center;
+}
+.reset:hover{
+    background-color: rgb(218, 54, 54);
+    color: white;
 }
 @media(max-width:600px){
     ul a{
