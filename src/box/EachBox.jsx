@@ -14,7 +14,6 @@ const EachBox = (props) => {
     data-vertical = {vertical}
     data-play=''
     >
-      {id}
     </div>
   )
 }

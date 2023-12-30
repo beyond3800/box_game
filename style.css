@@ -3,8 +3,8 @@
     grid-template-columns: repeat(3,1fr);
     width: 300px;
     margin-top: 200px;
-    gap: 1px;
 }
+
 main{
     display: grid;
     place-content: center;
@@ -12,15 +12,50 @@ main{
 .eachBox{
     width: 100px;
     height: 80px;
-    border: 1px solid #333;
     background: #eee;
     cursor: pointer;
+    text-align: center;
+    font-size: 70px;
+}
+.eachBox:nth-child(1){
+    border-left:none ;
+    border-top: none;
+    border-bottom: 1px solid;
+}
+.eachBox:nth-child(2){
+    border-bottom: 1px solid;
+    border-left:1px solid ;
+    border-right: 1px solid;
+}
+.eachBox:nth-child(3){
+    border-bottom: 1px solid;
+}
+.eachBox:nth-child(4){
+    border-top: none;
+    border-bottom: 1px solid;
+}
+.eachBox:nth-child(5){
+    border-top: none;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+}
+.eachBox:nth-child(6){
+    border-bottom: 1px solid;
+}
+.eachBox:nth-child(8){
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+.eachBox:nth-child(7){
+    border-left:none ;
+    border-top: none;
 }
 .player{
-    background: #000;
+    /* background: #000; */
 }
 .com{
-    background: red;
+    /* background: red; */
 }
 .scores{
     display: flex;
