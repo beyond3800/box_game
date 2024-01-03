@@ -144,7 +144,11 @@ ul a:hover{
     background-color: rgb(218, 54, 54);
     color: white;
 }
+
 @media(max-width:600px){
+    .grid-col-3{
+        margin-top: 100px;
+    }
     ul a{
         font-size: small;
         font-weight: bold;

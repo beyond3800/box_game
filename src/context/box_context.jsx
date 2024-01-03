@@ -19,34 +19,30 @@ export const BoxProvider = (props) =>{
         const getItems =  JSON.parse(localStorage.getItem('score'))
         const rounds =  JSON.parse(localStorage.getItem('round'))
         const getBoard = localStorage.getItem('board') 
-        if(getItems == null){
+        if(getItems == null)
+        {
             saveState(playerScore,computerScore)
         }
-        else{
+        else
+        {
             const {player,computer} = getItems;
             player?setPlayerScore(player):setPlayerScore(0)
             computer?setComputerScore(computer):setComputerScore(0)
         }
-        // if(!getBoard){
-        //     localStorage.setItem('board',JSON.stringify({'playerId':[],'computerId':[]})) 
-        // }
-        // else{
-        //     SaveBoard()
-        // }
-        
-        if(!rounds){
+        if(!rounds)
+        {
             localStorage.setItem('round',0)
         }
-        else{
+        else
+        {
             setRound(rounds)
         }
-        if(localStorage.getItem('firstPlay')){
+        if(localStorage.getItem('firstPlay'))
+        {
             const {play,winner} = JSON.parse(localStorage.getItem('firstPlay'))
             if(play && winner == 'player' || winner == 'draw'){
                 computer()
             }
-            // setFirstPlay(play)  
-            // setWinner('computer plays first')
         }
         
     },[]);
@@ -186,22 +182,17 @@ export const BoxProvider = (props) =>{
 
     // handleClick players function
     const handleClick = (props,e) =>{
-        // if(!comPlaying){
-            const {id,on} = props.data
-            const {play} = e.target.dataset
-            const board = [...boxRef.current.children]
-            
-            // localStorage.setItem('board',board)
-            // console.log(board)
-            setComPlaying(false)
-        // }
-        if(play == '' && winner == ''){
+        const {play} = e.target.dataset
+        setComPlaying(false)
+        if(play == '' && winner == '')
+        {
             e.target.dataset.play = 'player'
             e.target.classList.add('player')
-            console.log(e.target.textContent='o')
+            e.target.textContent='o'
             computer();
         }
-        else{
+        else
+        {
             return
         }
     };
@@ -211,7 +202,7 @@ export const BoxProvider = (props) =>{
         setComPlaying(true)
         setTimeout(() => {
             computerPlays(CPH(forAllLoops().boxBoard,forAllLoops().board,forAllLoops().PlayerBoard),forAllLoops().board)
-        }, 1000)
+        }, 500)
     };
 
     //CPH checking player hand
@@ -301,34 +292,6 @@ export const BoxProvider = (props) =>{
             }
         }
         const {playerId,computerId,boxBoard} = forAllLoops()
-        // if(!winner){
-        //    localStorage.setItem('board',JSON.stringify({playerId,computerId})) 
-        // }
-        // let newBoardId = JSON.parse(localStorage.getItem('board'))
-        // if( newBoardId ){
-        //     for(let playerIds of playerId){
-        //         for(const id of newBoardId.playerId){
-        //             if(id != playerIds){
-        //                 newBoardId.playerId.push(playerIds)
-        //             }
-        //         }
-                
-        //     }
-        //     for(let computerIds of computerId){
-        //         for(const id of newBoardId.computerId){
-        //             if(id != computerIds){
-        //                 newBoardId.playerId.push(computerIds)
-        //             }
-        //         // newBoardId.computerId.push(computerIds)
-        //     }
-        // }
-
-        // }
-        // else{
-            // localStorage.setItem('board',JSON.stringify({'playerId':newBoardId.playerId,'computerId':newBoardId.computerId})) 
-        // }
-       
-        // localStorage.setItem('board',{'playerId':newBoardId.playerId,'computerId':newBoardId.computerId})
         getWinner(forAllLoops());
         addPlayersScores()
     };
@@ -362,22 +325,23 @@ export const BoxProvider = (props) =>{
     // clearBoard calls the emptyBoard 
     const clearBoard = () =>
     {
-           if(winner == 'player' || winner == 'draw' && firstPlay)
-    {
-        setTimeout(() => {
-            emptyBoard()
-        }, 2000);
-        setTimeout(() => {
-            computerPlaysFirst(firstPlay);
-            setWinner('')
-        }, 2200);
+        if(winner == 'player' || winner == 'draw' && firstPlay)
+        {
+            setTimeout(() => {
+                emptyBoard()
+            }, 2000);
+            setTimeout(() => {
+                computerPlaysFirst(firstPlay);
+                setWinner('')
+            }, 2200);
         
-    }
-    else if(winner){
-        setTimeout(() => {
-            emptyBoard()
-        }, 2000);
-    }
+        }
+        else if(winner)
+        {
+            setTimeout(() => {
+                emptyBoard()
+            }, 2000);
+        }
     };
 
     // this function empty the board
@@ -407,7 +371,7 @@ export const BoxProvider = (props) =>{
     // this function checks if computer is to play first or not
     const computerPlaysFirst = (firstPlay) =>
     {
-        if(firstPlay && forAllLoops().boxBoard.all.length > 7 || winner == 'draw'){
+        if(firstPlay == 'computer' && forAllLoops().boxBoard.all.length > 7 || winner == 'draw'){
             computer()
         }
     };
@@ -420,7 +384,6 @@ export const BoxProvider = (props) =>{
                 return prev+1
             })
             played(round+1)
-            console.log('draw')
         }
         if(getWinner(forAllLoops()) == 'player'){
             setPlayerScore(prev=>prev+1)
